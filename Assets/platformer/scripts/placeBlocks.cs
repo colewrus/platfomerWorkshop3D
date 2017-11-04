@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class placeBlocks : MonoBehaviour {
 
@@ -97,6 +98,11 @@ public class placeBlocks : MonoBehaviour {
         {
             currentObj.transform.position = ray.origin + fineTune + ray.direction * init_distance;
 
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                currentObj.transform.RotateAroundLocal(transform.up, 45);
+            }
+
             if (Input.GetKeyDown(KeyCode.R))
             {
                 if(rotationPos < rotations.Count-1)
@@ -154,23 +160,25 @@ public class placeBlocks : MonoBehaviour {
             
         }
 
+
+
         if (Input.GetKeyDown(KeyCode.Escape))
-        {
+        {            
             if (!panel_Menu.active)
             {               
                 panel_Menu.SetActive(true);
                 Cursor.lockState = CursorLockMode.None;
-                Cursor.lockState = CursorLockMode.Confined;
-                Cursor.visible = true;
+                Debug.Log(Cursor.lockState);
+                Time.timeScale = 0;
+
             }else
             {
                 panel_Menu.SetActive(false);
-            }
-
-           
-        }       
-
-	}
+                Cursor.lockState = CursorLockMode.Locked;
+                Time.timeScale = 1;
+            }          
+        }
+    }
 
 
     void timerUpdate()
@@ -305,6 +313,7 @@ public class placeBlocks : MonoBehaviour {
     public void resumeGame()
     {
         Debug.Log("resume");
+        Time.timeScale = 1;
         panel_Menu.SetActive(false);
     }
 
