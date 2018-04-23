@@ -169,7 +169,7 @@ public class placeBlocks : MonoBehaviour {
                 panel_Menu.SetActive(true);
                 Cursor.lockState = CursorLockMode.None;
                 Debug.Log(Cursor.lockState);
-                Time.timeScale = 0;
+                Time.timeScale = 0.1f;
 
             }else
             {
