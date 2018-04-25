@@ -21,8 +21,8 @@ public class platformer_GM : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-       
-        obj_coinList.Clear();
+
+        obj_coinList.AddRange(GameObject.FindGameObjectsWithTag("coin"));
 	}
 	
 	// Update is called once per frame

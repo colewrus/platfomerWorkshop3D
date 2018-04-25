@@ -35,10 +35,12 @@ public class placeBlocks : MonoBehaviour {
     //UI systems
     public Text text_blockCount;
     public Text text_fallenCount;
+    public Text text_FallTooltip;
     public Text text_coins;
     public Text text_Timer;
     int blockCount;
     int fallenCount;
+   
     int coins;
     public GameObject panel_Menu;
     public GameObject image_infoBubble;
@@ -59,8 +61,8 @@ public class placeBlocks : MonoBehaviour {
         coins = 0;
         rotationPos = 0;
         init_distance = 5;
-        timer = 0; 
-
+        timer = 0;
+        text_FallTooltip.gameObject.SetActive(false);
         setUI();
 
 	}
@@ -75,14 +77,10 @@ public class placeBlocks : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        mousePosition = Input.mousePosition;
-        Vector3 rayDirection = Camera.main.transform.TransformDirection(Vector3.forward) * init_distance;
-        Ray ray = new Ray(Camera.main.transform.position, rayDirection);
-        Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.TransformDirection(Vector3.forward)*init_distance, Color.green);
-        // ray = new Ray(transform.position + Vector3.up, rayDirection);
 
+       
 
-        timerUpdate();
+        //timerUpdate();
         if (Input.GetKey(KeyCode.Tab))
         {
             if(transform.position.y < -10)
@@ -92,10 +90,14 @@ public class placeBlocks : MonoBehaviour {
             }
            
             this.transform.position = respawn.transform.position;
+            text_FallTooltip.gameObject.SetActive(false);
         }
 
         if(currentObj != null)
         {
+            mousePosition = Input.mousePosition;
+            Vector3 rayDirection = Camera.main.transform.TransformDirection(Vector3.forward) * init_distance;
+            Ray ray = new Ray(Camera.main.transform.position, rayDirection);
             currentObj.transform.position = ray.origin + fineTune + ray.direction * init_distance;
 
             if (Input.GetKeyDown(KeyCode.E))
@@ -118,11 +120,11 @@ public class placeBlocks : MonoBehaviour {
             }
 
           
-            if (Input.GetAxis("Mouse ScrollWheel") > 0)
+            if (Input.GetAxis("Mouse ScrollWheel") > 0 || Input.GetKeyDown(KeyCode.PageUp))
             {
                 init_distance += 0.8f;
             }
-            if (Input.GetAxis("Mouse ScrollWheel") < 0)
+            if (Input.GetAxis("Mouse ScrollWheel") < 0 || Input.GetKeyDown(KeyCode.PageDown))
             {
                 if(init_distance > 4.0f)
                 {
@@ -130,9 +132,8 @@ public class placeBlocks : MonoBehaviour {
                 }else
                 {
                     init_distance = 4;
-                }
-                
-            }
+                }                
+            }     
         }
 
 
@@ -160,7 +161,7 @@ public class placeBlocks : MonoBehaviour {
             
         }
 
-
+        FallCheck();
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {            
@@ -180,6 +181,13 @@ public class placeBlocks : MonoBehaviour {
         }
     }
 
+    void FallCheck()
+    {
+        if(transform.position.y <= -10 && !text_FallTooltip.gameObject.active)
+        {
+            text_FallTooltip.gameObject.SetActive(true);
+        }
+    }
 
     void timerUpdate()
     {
@@ -272,7 +280,7 @@ public class placeBlocks : MonoBehaviour {
             }
         }
 
-		if (Input.GetKeyDown (KeyCode.F1)) {
+		if (Input.GetKeyDown (KeyCode.T)) {
 			if (panel_Instructions.activeSelf) {
 				panel_Instructions.SetActive (false);
 			} else {
@@ -280,7 +288,7 @@ public class placeBlocks : MonoBehaviour {
 			}
 		}
 
-        if (Input.GetKeyDown(KeyCode.F2))
+        if (Input.GetKeyDown(KeyCode.F2) || Input.GetKeyDown(KeyCode.U))
         {
            for(int i = 0; i < blocksPlaced.Count; i++)
             {
